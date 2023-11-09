@@ -140,9 +140,13 @@ class walkthrough_test extends \qbehaviour_walkthrough_test_base {
             $this->get_does_not_contain_submit_button_expectation(),
             $this->get_contains_try_again_button_expectation(true),
             $this->get_does_not_contain_correctness_expectation(),
-            $this->get_contains_num_parts_correct_ordering(0, 5, 1),
             $this->get_contains_hint_expectation('This is the first hint')
         );
+
+        $langstrings = $this->get_contains_num_parts_correct_ordering_strings(0, 5, 1);
+        $this->assertEquals(2, sizeof($langstrings));
+        $this->check_output_contains($langstrings['numpartial']);
+        $this->check_output_contains($langstrings['numincorrect']);
 
         // Do try again.
         $this->process_submission(['-tryagain' => 1]);
@@ -188,36 +192,41 @@ class walkthrough_test extends \qbehaviour_walkthrough_test_base {
      * @param int $numright The number of item correct.
      * @param int $numpartial The number of partial correct item.
      * @param int $numincorrect The number of incorrect item.
-     * @return question_pattern_expectation
+     * @return array
      */
-    protected function get_contains_num_parts_correct_ordering(
+    protected function get_contains_num_parts_correct_ordering_strings(
         int $numright,
         int $numpartial,
         int $numincorrect
-    ): question_pattern_expectation {
-        $a = new stdClass();
-        $a->numright = $numright;
-        $a->numpartial = $numpartial;
-        $a->numincorrect = $numincorrect;
-
-        $output = '';
-        if ($a->numright) {
-            $a->numrightplural = get_string($a->numright > 1 ? 'itemplural' : 'itemsingular', 'qtype_ordering');
-            $output .= '<div>' . get_string('yougotnright', 'qtype_ordering', $a) . '</div>';
+    ): array {
+        $langstrings = [];
+        if ($numright) {
+            if ($numright > 1) {
+                $numright = get_string('yougotmultiplecorrect', 'qtype_ordering', $numright);
+            } else {
+                $numright = get_string('yougotonecorrect', 'qtype_ordering');
+            }
+            $langstrings['numright'] = $numright;
         }
 
-        if ($a->numpartial) {
-            $a->numpartialplural = get_string($a->numpartial > 1 ? 'itemplural' : 'itemsingular', 'qtype_ordering');
-            $output .= '<div>' . get_string('yougotnpartial', 'qtype_ordering', $a) . '</div>';
+        if ($numpartial) {
+            if ($numpartial > 1) {
+                $numpartial = get_string('yougotmultiplepartial', 'qtype_ordering', $numpartial);
+            } else {
+                $numpartial = get_string('yougotonepartial', 'qtype_ordering');
+            }
+            $langstrings['numpartial'] = $numpartial;
         }
 
-        if ($a->numincorrect) {
-            $a->numincorrectplural = get_string($a->numincorrect > 1 ? 'itemplural' : 'itemsingular', 'qtype_ordering');
-            $output .= '<div>' . get_string('yougotnincorrect', 'qtype_ordering', $a) . '</div>';
+        if ($numincorrect) {
+            if ($numincorrect > 1) {
+                $numincorrect = get_string('yougotmultipleincorrect', 'qtype_ordering', $numincorrect);
+            } else {
+                $numincorrect = get_string('yougotoneincorrect', 'qtype_ordering');
+            }
+            $langstrings['numincorrect'] = $numincorrect;
         }
 
-        $pattern = '/<div class="numpartscorrect">' . preg_quote($output, '/');
-
-        return new question_pattern_expectation($pattern . '/');
+        return $langstrings;
     }
 }

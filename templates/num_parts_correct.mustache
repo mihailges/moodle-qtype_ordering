@@ -1,0 +1,70 @@
+{{!
+    This file is part of Moodle - http://moodle.org/
+
+    Moodle is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    Moodle is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
+}}
+{{!
+    @template qtype_ordering/num_parts_correct
+
+    Renders a statement of how many sub-parts of the question the student got correct|partial|incorrect.
+
+    Context variables required for this template:
+    * numcorrect - The number of correct answers.
+    * hasmultiplecorrect - Whether there is more than one correct answer.
+    * numpartial - The number of partially correct answers.
+    * hasmultiplepartial - Whether there is more than one partially correct answer.
+    * numincorrect - The number of incorrect answers.
+    * hasmultipleincorrect - Whether there is more than one incorrect answer.
+
+    Example context (json):
+    {
+        "numcorrect": 1,
+        "hasmultiplecorrect": false,
+        "numpartial": 3,
+        "hasmultiplepartial": true,
+        "numincorrect": 0,
+        "hasmultipleincorrect": false
+    }
+}}
+
+{{#numcorrect}}
+    <div>
+        {{#hasmultiplecorrect}}
+            {{#str}} yougotmultiplecorrect, qtype_ordering, {{numcorrect}} {{/str}}
+        {{/hasmultiplecorrect}}
+        {{^hasmultiplecorrect}}
+            {{#str}} yougotonecorrect, qtype_ordering {{/str}}
+        {{/hasmultiplecorrect}}
+    </div>
+{{/numcorrect}}
+{{#numpartial}}
+    <div>
+        {{#hasmultiplepartial}}
+            {{#str}} yougotmultiplepartial, qtype_ordering, {{numpartial}} {{/str}}
+        {{/hasmultiplepartial}}
+        {{^hasmultiplepartial}}
+            {{#str}} yougotonepartial, qtype_ordering {{/str}}
+        {{/hasmultiplepartial}}
+    </div>
+{{/numpartial}}
+{{#numincorrect}}
+    <div>
+        {{#hasmultipleincorrect}}
+            {{#str}} yougotmultipleincorrect, qtype_ordering, {{numincorrect}} {{/str}}
+        {{/hasmultipleincorrect}}
+        {{^hasmultipleincorrect}}
+            {{#str}} yougotoneincorrect, qtype_ordering {{/str}}
+        {{/hasmultipleincorrect}}
+    </div>
+{{/numincorrect}}
