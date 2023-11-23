@@ -480,7 +480,7 @@ class qtype_ordering_renderer extends qtype_with_combined_feedback_renderer {
     }
 
     /**
-     * Gereate a brief statement of how many sub-parts of this question the
+     * Generate a brief statement of how many sub-parts of this question the
      * student got correct|partial|incorrect.
      *
      * @param question_attempt $qa The question attempt to display.

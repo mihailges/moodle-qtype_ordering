@@ -17,21 +17,54 @@
 {{!
     @template qtype_ordering/num_parts_correct
 
-    Renders parts of correct answers.
+    Renders a statement of how many sub-parts of the question the student got correct|partial|incorrect.
 
     Context variables required for this template:
-    * yougotnright - Num of correct answers.
-    * yougotnpartial - Num of partially correct answers.
-    * yougotnincorrect - Num of incorrect answers.
+    * numcorrect - The number of correct answers.
+    * hasmultiplecorrect - Whether there is more than one correct answer.
+    * numpartial - The number of partially correct answers.
+    * hasmultiplepartial - Whether there is more than one partially correct answer.
+    * numincorrect - The number of incorrect answers.
+    * hasmultipleincorrect - Whether there is more than one incorrect answer.
 
     Example context (json):
     {
-        "yougotnright": "You have 1 item correct.",
-        "yougotnpartial": "You have 2 items partially correct.",
-        "yougotnincorrect": "You have 3 items incorrect.",
+        "numcorrect": 1,
+        "hasmultiplecorrect": false,
+        "numpartial": 3,
+        "hasmultiplepartial": true,
+        "numincorrect": 0,
+        "hasmultipleincorrect": false
     }
 }}
 
-{{#yougotnright}}<div>{{yougotnright}}</div>{{/yougotnright}}
-{{#yougotnpartial}}<div>{{yougotnpartial}}</div>{{/yougotnpartial}}
-{{#yougotnincorrect}}<div>{{yougotnincorrect}}</div>{{/yougotnincorrect}}
+{{#numcorrect}}
+    <div>
+        {{#hasmultiplecorrect}}
+            {{#str}} yougotmultiplecorrect, qtype_ordering, {{numcorrect}} {{/str}}
+        {{/hasmultiplecorrect}}
+        {{^hasmultiplecorrect}}
+            {{#str}} yougotonecorrect, qtype_ordering {{/str}}
+        {{/hasmultiplecorrect}}
+    </div>
+{{/numcorrect}}
+{{#numpartial}}
+    <div>
+        {{#hasmultiplepartial}}
+            {{#str}} yougotmultiplepartial, qtype_ordering, {{numpartial}} {{/str}}
+        {{/hasmultiplepartial}}
+        {{^hasmultiplepartial}}
+            {{#str}} yougotonepartial, qtype_ordering {{/str}}
+        {{/hasmultiplepartial}}
+    </div>
+{{/numpartial}}
+{{#numincorrect}}
+    <div>
+        {{#hasmultipleincorrect}}
+            {{#str}} yougotmultipleincorrect, qtype_ordering, {{numincorrect}} {{/str}}
+        {{/hasmultipleincorrect}}
+        {{^hasmultipleincorrect}}
+            {{#str}} yougotoneincorrect, qtype_ordering {{/str}}
+        {{/hasmultipleincorrect}}
+    </div>
+{{/numincorrect}}

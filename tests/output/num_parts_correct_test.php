@@ -57,12 +57,7 @@ class num_parts_correct_test extends advanced_testcase {
         $question->options->gradingtype = $gradingtype;
 
         $keys = implode(',', array_keys($answeritems));
-        $values = array_values($answeritems);
-
         $step->set_qt_var('_currentresponse', $keys);
-
-        list($fraction, $state) = $question->grade_response(qtype_ordering_test_helper::get_response($question, $values));
-        $qa->get_last_step()->set_state($state);
 
         $renderer = $PAGE->get_renderer('core');
         $specificgradedetailfeedback = new num_parts_correct($qa);
@@ -85,15 +80,24 @@ class num_parts_correct_test extends advanced_testcase {
                 [13 => 'Modular', 14 => 'Object', 15 => 'Oriented', 17 => 'Learning', 16 => 'Dynamic', 18 => 'Environment'],
                 qtype_ordering_question::GRADING_RELATIVE_ALL_PREVIOUS_AND_NEXT,
                 [
-                    'yougotnright' => 'You have 4 items correct.',
-                    'yougotnpartial' => 'You have 2 items partially correct.',
+                    'numcorrect' => 4,
+                    'hasmultiplecorrect' => true,
+                    'numpartial' => 2,
+                    'hasmultiplepartial' => true,
+                    'numincorrect' => 0,
+                    'hasmultipleincorrect' => false,
                 ],
             ],
             'Incorrect question attempt (horizontal layout). Relative to ALL the previous and next items' => [
                 [14 => 'Object', 16 => 'Dynamic', 13 => 'Modular', 17 => 'Learning', 18 => 'Environment', 15 => 'Oriented'],
                 qtype_ordering_question::GRADING_ABSOLUTE_POSITION,
                 [
-                    'yougotnincorrect' => 'You have 6 items incorrect.',
+                    'numcorrect' => 1,
+                    'hasmultiplecorrect' => false,
+                    'numpartial' => 0,
+                    'hasmultiplepartial' => false,
+                    'numincorrect' => 6,
+                    'hasmultipleincorrect' => true,
                 ],
             ],
         ];
