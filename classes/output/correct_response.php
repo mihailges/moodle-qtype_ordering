@@ -28,7 +28,7 @@ class correct_response extends renderable_base {
     /**
      * Export the data for the mustache template.
      *
-     * @param \renderer_base $output renderer to be used to render the action bar elements.
+     * @param \renderer_base $output The output renderer.
      * @return array
      */
     public function export_for_template(\renderer_base $output): array {
