@@ -21,50 +21,29 @@
 
     Context variables required for this template:
     * numcorrect - The number of correct answers.
-    * hasmultiplecorrect - Whether there is more than one correct answer.
     * numpartial - The number of partially correct answers.
-    * hasmultiplepartial - Whether there is more than one partially correct answer.
     * numincorrect - The number of incorrect answers.
-    * hasmultipleincorrect - Whether there is more than one incorrect answer.
 
     Example context (json):
     {
         "numcorrect": 1,
-        "hasmultiplecorrect": false,
         "numpartial": 3,
-        "hasmultiplepartial": true,
-        "numincorrect": 0,
-        "hasmultipleincorrect": false
+        "numincorrect": 0
     }
 }}
 
 {{#numcorrect}}
     <div>
-        {{#hasmultiplecorrect}}
-            {{#str}} yougotmultiplecorrect, qtype_ordering, {{numcorrect}} {{/str}}
-        {{/hasmultiplecorrect}}
-        {{^hasmultiplecorrect}}
-            {{#str}} yougotonecorrect, qtype_ordering {{/str}}
-        {{/hasmultiplecorrect}}
+        {{#str}} correctitemsnumber, qtype_ordering, {{numcorrect}} {{/str}}
     </div>
 {{/numcorrect}}
 {{#numpartial}}
     <div>
-        {{#hasmultiplepartial}}
-            {{#str}} yougotmultiplepartial, qtype_ordering, {{numpartial}} {{/str}}
-        {{/hasmultiplepartial}}
-        {{^hasmultiplepartial}}
-            {{#str}} yougotonepartial, qtype_ordering {{/str}}
-        {{/hasmultiplepartial}}
+        {{#str}} partialitemsnumber, qtype_ordering, {{numpartial}} {{/str}}
     </div>
 {{/numpartial}}
 {{#numincorrect}}
     <div>
-        {{#hasmultipleincorrect}}
-            {{#str}} yougotmultipleincorrect, qtype_ordering, {{numincorrect}} {{/str}}
-        {{/hasmultipleincorrect}}
-        {{^hasmultipleincorrect}}
-            {{#str}} yougotoneincorrect, qtype_ordering {{/str}}
-        {{/hasmultipleincorrect}}
+        {{#str}} incorrectitemsnumber, qtype_ordering, {{numincorrect}} {{/str}}
     </div>
 {{/numincorrect}}

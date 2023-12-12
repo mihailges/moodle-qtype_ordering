@@ -120,9 +120,6 @@ $string['showgrading'] = 'Grading details';
 $string['showgrading_help'] = 'Choose whether to show or hide details of the score calculation when a student reviews a response to this Ordering question.';
 
 $string['vertical'] = 'Vertical';
-$string['yougotonecorrect'] = 'You have 1 item correct.';
-$string['yougotmultiplecorrect'] = 'You have {$a} items correct.';
-$string['yougotonepartial'] = 'You have 1 item partially correct.';
-$string['yougotmultiplepartial'] = 'You have {$a} items partially correct.';
-$string['yougotoneincorrect'] = 'You have 1 item incorrect.';
-$string['yougotmultipleincorrect'] = 'You have {$a} items incorrect.';
+$string['correctitemsnumber'] = 'Correct items: {$a}';
+$string['partialitemsnumber'] = 'Partially correct items: {$a}';
+$string['incorrectitemsnumber'] = 'Incorrect items: {$a}';

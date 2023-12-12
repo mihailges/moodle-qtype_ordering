@@ -143,10 +143,9 @@ class walkthrough_test extends \qbehaviour_walkthrough_test_base {
             $this->get_contains_hint_expectation('This is the first hint')
         );
 
-        $langstrings = $this->get_contains_num_parts_correct_ordering_strings(0, 5, 1);
-        $this->assertEquals(2, sizeof($langstrings));
-        $this->check_output_contains($langstrings['numpartial']);
-        $this->check_output_contains($langstrings['numincorrect']);
+        $this->check_output_does_not_contain(get_string('correctitemsnumber', 'qtype_ordering', 0));
+        $this->check_output_contains(get_string('partialitemsnumber', 'qtype_ordering', 5));
+        $this->check_output_contains(get_string('incorrectitemsnumber', 'qtype_ordering', 1));
 
         // Do try again.
         $this->process_submission(['-tryagain' => 1]);
@@ -184,49 +183,5 @@ class walkthrough_test extends \qbehaviour_walkthrough_test_base {
         // Verify.
         $this->check_current_state(question_state::$gradedright);
         $this->check_current_mark(2);
-    }
-
-    /**
-     * Return question pattern expectation.
-     *
-     * @param int $numright The number of item correct.
-     * @param int $numpartial The number of partial correct item.
-     * @param int $numincorrect The number of incorrect item.
-     * @return array
-     */
-    protected function get_contains_num_parts_correct_ordering_strings(
-        int $numright,
-        int $numpartial,
-        int $numincorrect
-    ): array {
-        $langstrings = [];
-        if ($numright) {
-            if ($numright > 1) {
-                $numright = get_string('yougotmultiplecorrect', 'qtype_ordering', $numright);
-            } else {
-                $numright = get_string('yougotonecorrect', 'qtype_ordering');
-            }
-            $langstrings['numright'] = $numright;
-        }
-
-        if ($numpartial) {
-            if ($numpartial > 1) {
-                $numpartial = get_string('yougotmultiplepartial', 'qtype_ordering', $numpartial);
-            } else {
-                $numpartial = get_string('yougotonepartial', 'qtype_ordering');
-            }
-            $langstrings['numpartial'] = $numpartial;
-        }
-
-        if ($numincorrect) {
-            if ($numincorrect > 1) {
-                $numincorrect = get_string('yougotmultipleincorrect', 'qtype_ordering', $numincorrect);
-            } else {
-                $numincorrect = get_string('yougotoneincorrect', 'qtype_ordering');
-            }
-            $langstrings['numincorrect'] = $numincorrect;
-        }
-
-        return $langstrings;
     }
 }

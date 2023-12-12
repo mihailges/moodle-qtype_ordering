@@ -38,11 +38,8 @@ class num_parts_correct extends renderable_base {
 
         return [
                 'numcorrect' => $numright,
-                'hasmultiplecorrect' => $numright > 1,
                 'numpartial' => $numpartial,
-                'hasmultiplepartial' => $numpartial > 1,
                 'numincorrect' => $numincorrect,
-                'hasmultipleincorrect' => $numincorrect > 1,
         ];
     }
 }

@@ -81,11 +81,8 @@ class num_parts_correct_test extends advanced_testcase {
                 qtype_ordering_question::GRADING_RELATIVE_ALL_PREVIOUS_AND_NEXT,
                 [
                     'numcorrect' => 4,
-                    'hasmultiplecorrect' => true,
                     'numpartial' => 2,
-                    'hasmultiplepartial' => true,
                     'numincorrect' => 0,
-                    'hasmultipleincorrect' => false,
                 ],
             ],
             'Incorrect question attempt (horizontal layout). Relative to ALL the previous and next items' => [
@@ -93,11 +90,8 @@ class num_parts_correct_test extends advanced_testcase {
                 qtype_ordering_question::GRADING_ABSOLUTE_POSITION,
                 [
                     'numcorrect' => 0,
-                    'hasmultiplecorrect' => false,
                     'numpartial' => 0,
-                    'hasmultiplepartial' => false,
                     'numincorrect' => 6,
-                    'hasmultipleincorrect' => true,
                 ],
             ],
         ];
