@@ -32,12 +32,17 @@ abstract class renderable_base implements templatable, renderable {
     /** @var question_attempt $qa The question attempt object. */
     protected $qa;
 
+    /** @var mixed $options The question options. */
+    protected $options;
+
     /**
      * The class constructor.
      *
      * @param question_attempt $qa The question attempt object.
+     * @param mixed $options Controls what should and should not be displayed via question_display_options but unit tests are fickle.
      */
-    public function __construct(question_attempt $qa) {
+    public function __construct(question_attempt $qa, mixed $options = null) {
         $this->qa = $qa;
+        $this->options = $options;
     }
 }
