@@ -17,42 +17,72 @@
 {{!
     @template qtype_ordering/feedback
 
-    Renders the grade detail of the feedback.
+    Renders the feedback for the question.
 
     Context variables required for this template:
-    * feedback - Any specific feedback for the question.
+    * specificfeedback - Any specific feedback for the question.
     * numpartscorrect - The number of parts correct.
+    * specificgradedetailfeedback - The specific grade detail feedback.
     * hint - The hint for the question.
     * generalfeedback - The general feedback for the question.
     * rightanswer - The right answer for the question.
 
     Example context (json):
     {
-        "feedback": "Maybe you should try again.",
-        "numpartscorrect": "2",
+        "specificfeedback": "Maybe you should try again.",
+        "numpartscorrect": {
+            "numcorrect": 1,
+            "numpartial": 3,
+            "numincorrect": 0
+        },
+        "specificgradedetailfeedback": {
+            "showpartialwrong": true,
+            "gradingtype": "Grading type: Absolute position",
+            "gradedetails": "93",
+            "orderinglayoutclass": "vertical",
+            "scoredetails": [
+                {
+                    "score": "1",
+                    "maxscore": "1",
+                    "percent": "100"
+                },
+                {
+                    "score": "0",
+                    "maxscore": "1",
+                    "percent": "0"
+                }
+            ]
+        },
         "hint": "The cake is a lie.",
         "generalfeedback": "Here is some general feedback.",
-        "rightanswer": "A, B, C, D, E"
+        "rightanswer": {
+            "hascorrectresponse": true,
+            "showcorrect": "true",
+            "orderinglayoutclass": "vertical",
+            "correctanswers": [
+                {
+                    "answertext": "Correct answer 1"
+                },
+                {
+                    "answertext": "Correct answer 2"
+                }
+            ]
+        }
     }
 }}
-{{#feedback}}
+{{#specificfeedback}}
     <div class="specificfeedback">
         {{{.}}}
     </div>
-    {{#numpartscorrect}}
-        <div class="numpartscorrect">
-            {{>qtype_ordering/num_parts_correct}}
-        </div>
-    {{/numpartscorrect}}
-    {{#specificfeedback}}
-        {{>qtype_ordering/specific_grade_detail_feedback}}
-    {{/specificfeedback}}
-{{/feedback}}
+{{/specificfeedback}}
 {{#numpartscorrect}}
     <div class="numpartscorrect">
         {{>qtype_ordering/num_parts_correct}}
     </div>
 {{/numpartscorrect}}
+{{#specificgradedetailfeedback}}
+    {{>qtype_ordering/specific_grade_detail_feedback}}
+{{/specificgradedetailfeedback}}
 {{#hint}}
     <div class="hint">
         {{{.}}}

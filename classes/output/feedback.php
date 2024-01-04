@@ -17,6 +17,8 @@
 namespace qtype_ordering\output;
 
 use renderer_base;
+use question_attempt;
+use question_display_options;
 
 /**
  * Renderable class for the displaying the feedback.
@@ -26,6 +28,20 @@ use renderer_base;
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class feedback extends renderable_base {
+
+    /** @var question_display_options $options The question options. */
+    protected $options;
+
+    /**
+     * The class constructor.
+     *
+     * @param question_attempt $qa The question attempt object.
+     * @param question_display_options $options Controls what should and should not be displayed via question_display_options but unit tests are fickle.
+     */
+    public function __construct(question_attempt $qa, question_display_options $options) {
+        parent::__construct($qa);
+        $this->options = $options;
+    }
 
     /**
      * Export the data for the mustache template.
@@ -38,33 +54,23 @@ class feedback extends renderable_base {
 
         $data = [];
         $question = $this->qa->get_question();
-        $hint = null;
-        $isshownumpartscorrect = true;
         $qtyperenderer = $PAGE->get_renderer('qtype_ordering');
 
         if ($this->options->feedback) {
             // Literal render out but we trust the teacher.
-            $data['feedback'] = $qtyperenderer->specific_feedback($this->qa);
-
-            if ($this->options->numpartscorrect) {
-                $numpartscorrect = new num_parts_correct($this->qa);
-                $data['numpartscorrect'] = $numpartscorrect->export_for_template($output);
-                $isshownumpartscorrect = false;
-            }
+            $data['specificfeedback'] = $qtyperenderer->specific_feedback($this->qa);
 
             $specificgradedetailfeedback = new specific_grade_detail_feedback($this->qa);
-            $data['specificfeedback'] = $specificgradedetailfeedback->export_for_template($output);
-            $hint = $this->qa->get_applicable_hint();
+            $data['specificgradedetailfeedback'] = $specificgradedetailfeedback->export_for_template($output);
+
+            if ($hint = $this->qa->get_applicable_hint()) {
+                $data['hint'] = $question->format_hint($hint, $this->qa);
+            }
         }
 
-        if ($this->options->numpartscorrect && $isshownumpartscorrect) {
+        if ($this->options->numpartscorrect) {
             $numpartscorrect = new num_parts_correct($this->qa);
             $data['numpartscorrect'] = $numpartscorrect->export_for_template($output);
-        }
-
-        if ($hint) {
-            $data['hint'] = $question->format_hint($hint, $this->qa);
-
         }
 
         if ($this->options->generalfeedback) {
