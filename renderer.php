@@ -163,4 +163,14 @@ class qtype_ordering_renderer extends qtype_with_combined_feedback_renderer {
         return $this->output->render_from_template('qtype_ordering/num_parts_correct',
             $numpartscorrect->export_for_template($this->output));
     }
+
+    /**
+     * Return an appropriate icon (green tick, red cross, etc.) for a grade.
+     * @param float $fraction grade on a scale 0..1.
+     * @param bool $selected whether to show a big or small icon. (Deprecated)
+     * @return string html fragment.
+     */
+    public function feedback_image($fraction, $selected = true): string {
+        return parent::feedback_image($fraction);
+    }
 }

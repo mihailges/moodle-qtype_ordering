@@ -72,37 +72,32 @@ class formulation_and_controls extends renderable_base {
         $ablockid          = 'id_ablock_'.$question->id;
 
         // Set CSS classes for sortable list and sortable items.
-        $sortablelist = 'sortablelist';
         if ($class = $question->get_ordering_layoutclass()) {
-            $sortablelist .= ' '.$class; // Vertical or Horizontal.
+            $data['layoutclass'] = $class;
         }
         if ($class = $question->options->numberingstyle) {
-            $sortablelist .= ' numbering'.$class;
-        }
-        if ($this->qa->get_state()->is_active()) {
-            $sortablelist .= ' active';
-        } else {
-            $sortablelist .= ' notactive';
+            $data['numberingstyle'] = $class;
         }
 
         // In the multi-tries, the highlight response base on the hint highlight option.
-        if (isset($this->options->highlightresponse) && $this->options->highlightresponse) {
-            $sortablelist .= ' notactive';
+        if ((isset($this->options->highlightresponse) && $this->options->highlightresponse) || !$this->qa->get_state()->is_active()) {
+            $data['active'] = 'notactive';
+        } else if ($this->qa->get_state()->is_active()) {
+            $data['active'] = 'active';
         }
 
-        // Initialise JavaScript if not in readonly mode.
+        $sortableitem = 'sortableitem';
         if ($this->options->readonly) {
-            // Items cannot be dragged in readonly mode.
+            $data['readonly'] = true;
             $sortableitem = '';
-        } else {
-            $sortableitem = 'sortableitem';
-            $params = [$sortableid, $responseid];
-            $PAGE->requires->js_call_amd('qtype_ordering/drag_reorder', 'init', $params);
         }
 
         $data['questiontext'] = $question->format_questiontext($this->qa);
+        $data['ablockid'] = $ablockid;
+        $data['sortableid'] = $sortableid;
+        $data['responsename'] = $responsename;
+        $data['responseid'] = $responseid;
 
-        $printeditems = false;
         if (count($currentresponse)) {
 
             // Initialize the cache for the  answers' md5keys
@@ -116,13 +111,6 @@ class formulation_and_controls extends renderable_base {
                     continue; // Shouldn't happen !!
                 }
 
-                if (!$printeditems) {
-                    $printeditems = true;
-                    $data['ablockid'] = $ablockid;
-                    $data['sortablelist'] = $sortablelist;
-                    $data['sortableid'] = $sortableid;
-                }
-
                 $img = '';
                 // Set the CSS class and correctness img for this response.
                 // (correctness: HIDDEN=0, VISIBLE=1, EDITABLE=2).
@@ -130,9 +118,8 @@ class formulation_and_controls extends renderable_base {
                     case question_display_options::VISIBLE:
                         $score = $question->get_ordering_item_score($question, $position, $answerid);
                         if (isset($score['maxscore'])) {
-                            // Not great - repeating feedback_image().
-                            $feedbackclass = question_state::graded_state_for_fraction($score['fraction'])->get_feedback_class();
-                            $img = $output->pix_icon('i/grade_' . $feedbackclass, get_string($feedbackclass, 'question'));
+                            $renderer = $PAGE->get_renderer('qtype_ordering');
+                            $img = $renderer->feedback_image($score['fraction']);
                         }
                         $class = trim("$sortableitem " . $score['class']);
                         break;
@@ -147,8 +134,10 @@ class formulation_and_controls extends renderable_base {
 
                 if (isset($this->options->highlightresponse) && $this->options->highlightresponse) {
                     $score = $question->get_ordering_item_score($question, $position, $answerid);
-                    $feedbackclass = question_state::graded_state_for_fraction($score['fraction'])->get_feedback_class();
-                    $img = $output->pix_icon('i/grade_' . $feedbackclass, get_string($feedbackclass, 'question'));
+                    if (!isset($renderer)) {
+                        $renderer = $PAGE->get_renderer('qtype_ordering');
+                    }
+                    $img = $renderer->feedback_image($score['fraction']);
                     $class = trim("$sortableitem ". $score['class']);
                 }
 
@@ -167,11 +156,7 @@ class formulation_and_controls extends renderable_base {
             }
         }
 
-        if ($printeditems) {
-            $data['responsename'] = $responsename;
-            $data['responseid'] = $responseid;
-            $data['value'] = implode(',', $md5keys);
-        }
+        $data['value'] = implode(',', $md5keys);
 
         return $data;
     }

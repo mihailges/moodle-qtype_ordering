@@ -25,10 +25,12 @@
     * responseid - Response name for this question attempt.
     * value - Comma separated md5keys of the answer.
     * ablockid - Block id.
-    * sortablelist - Classes for for the block.
+    * layoutclass - Layout class.
+    * numberingstyle - Numbering style.
+    * active - if qa is active.
     * sortableid - Sortable id.
     * answers - An array containing the score details.
-
+    * readonly - Whether the question is readonly or not.
     Example context (json):
     {
         "questiontext": "Order this",
@@ -36,8 +38,11 @@
         "responseid": "id_q13_1_response_2",
         "value": "ordering_item_497031794414a552435f90151ac3b54b,ordering_item_5a35edab0f2bf86dfa3901baa8c235dc",
         "ablockid": "id_ablock_2",
-        "sortablelist": "sortablelist vertical numberingnone notactive",
+        "layoutclass": "vertical",
+        "numberingstyle": "numberingnone",
+        "active": "notactive",
         "sortableid": "id_sortable_2",
+        "readonly": "true",
         "answers": [
             {
                 "class": "incorrect",
@@ -58,7 +63,7 @@
     {{#responsename}}
         <div class="ablock" id="{{ablockid}}">
             <div class="answer ordering">
-                <ul class="{{sortablelist}}" id="{{sortableid}}">
+                <ul class="sortablelist {{#layoutclass}}{{layoutclass}}{{/layoutclass}} {{#numberingstyle}}numbering{{numberingstyle}}{{/numberingstyle}} {{#active}}{{active}}{{/active}}" id="{{sortableid}}">
                     {{#answers}}
                         <li class="{{class}}" id="{{id}}">
                             {{{answertext}}}
@@ -70,3 +75,10 @@
         <input name="{{responsename}}" id="{{responseid}}" type="hidden" value="{{value}}"/>
     {{/responsename}}
 </div>
+{{^readonly}}
+    {{#js}}
+        require(['qtype_ordering/drag_reorder'], function(drag_reorder) {
+        drag_reorder.init('{{sortableid}}', '{{responseid}}');
+        });
+    {{/js}}
+{{/readonly}}
