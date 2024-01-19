@@ -40,19 +40,21 @@
         "ablockid": "id_ablock_2",
         "layoutclass": "vertical",
         "numberingstyle": "numberingnone",
-        "active": "notactive",
+        "active": true,
         "sortableid": "id_sortable_2",
-        "readonly": "true",
+        "readonly": true,
         "answers": [
             {
-                "class": "incorrect",
                 "id": "ordering_item_497031794414a552435f90151ac3b54b",
-                "answertext": "<i class="icon fa fa-remove text-danger fa-fw "  title="Incorrect" role="img" aria-label="Incorrect"></i>Oriented"
+                "scoreclass": "correct",
+                "answertext": "Oriented",
+                "feedbackimage": "<i class="icon fa fa-remove text-danger fa-fw" title="Incorrect" role="img" aria-label="Incorrect"></i>"
             },
             {
-                "class": "incorrect",
                 "id": "ordering_item_5a35edab0f2bf86dfa3901baa8c235dc",
-                "answertext": "<i class="icon fa fa-remove text-danger fa-fw "  title="Incorrect" role="img" aria-label="Incorrect"></i>Object"
+                "scoreclass": "correct",
+                "answertext": "Object",
+                "feedbackimage": "<i class="icon fa fa-remove text-danger fa-fw" title="Incorrect" role="img" aria-label="Incorrect"></i>"
             }
         ]
     }
@@ -63,10 +65,10 @@
     {{#responsename}}
         <div class="ablock" id="{{ablockid}}">
             <div class="answer ordering">
-                <ul class="sortablelist {{#layoutclass}}{{layoutclass}}{{/layoutclass}} {{#numberingstyle}}numbering{{numberingstyle}}{{/numberingstyle}} {{#active}}{{active}}{{/active}}" id="{{sortableid}}">
+                <ul class="sortablelist {{layoutclass}} {{#numberingstyle}}numbering{{numberingstyle}}{{/numberingstyle}} {{#active}}active{{/active}}{{^active}}notactive{{/active}}" id="{{sortableid}}">
                     {{#answers}}
-                        <li class="{{class}}" id="{{id}}">
-                            {{{answertext}}}
+                        <li class="{{^readonly}}sortableitem{{/readonly}} {{scoreclass}}" id="{{id}}">
+                            {{{feedbackimage}}}{{{answertext}}}
                         </li>
                     {{/answers}}
                 </ul>

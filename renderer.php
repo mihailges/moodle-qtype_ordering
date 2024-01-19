@@ -166,6 +166,7 @@ class qtype_ordering_renderer extends qtype_with_combined_feedback_renderer {
 
     /**
      * Return an appropriate icon (green tick, red cross, etc.) for a grade.
+     *
      * @param float $fraction grade on a scale 0..1.
      * @param bool $selected whether to show a big or small icon. (Deprecated)
      * @return string html fragment.

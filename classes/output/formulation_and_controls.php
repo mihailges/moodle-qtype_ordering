@@ -18,7 +18,6 @@ namespace qtype_ordering\output;
 
 use question_attempt;
 use question_display_options;
-use question_state;
 
 /**
  * Renderable class for the displaying the formulation and controls of the question.
@@ -60,43 +59,31 @@ class formulation_and_controls extends renderable_base {
         $currentresponse = $question->currentresponse;
         $correctresponse = $question->correctresponse;
 
-        // Generate fieldnames and ids
-        // response_fieldname : 1_response_319
-        // response_name      : q27:1_response_319
-        // response_id        : id_q27_1_response_319
-        // sortable_id        : id_sortable_q27_1_response_319.
+        // Generate fieldnames and ids.
         $responsefieldname = $question->get_response_fieldname();
-        $responsename      = $this->qa->get_qt_field_name($responsefieldname);
-        $responseid        = 'id_'.preg_replace('/[^a-zA-Z0-9]+/', '_', $responsename);
-        $sortableid        = 'id_sortable_'.$question->id;
-        $ablockid          = 'id_ablock_'.$question->id;
+        $responsename = $this->qa->get_qt_field_name($responsefieldname);
+        $data['questiontext'] = $question->format_questiontext($this->qa);
+        $data['ablockid'] = 'id_ablock_' . $question->id;
+        $data['sortableid'] = 'id_sortable_' . $question->id;
+        $data['responsename'] = $responsename;
+        $data['responseid'] = 'id_' . preg_replace('/[^a-zA-Z0-9]+/', '_', $responsename);
 
-        // Set CSS classes for sortable list and sortable items.
+        // Set CSS classes for sortable list.
         if ($class = $question->get_ordering_layoutclass()) {
             $data['layoutclass'] = $class;
         }
-        if ($class = $question->options->numberingstyle) {
-            $data['numberingstyle'] = $class;
+        if ($numberingstyle = $question->options->numberingstyle) {
+            $data['numberingstyle'] = $numberingstyle;
         }
 
         // In the multi-tries, the highlight response base on the hint highlight option.
         if ((isset($this->options->highlightresponse) && $this->options->highlightresponse) || !$this->qa->get_state()->is_active()) {
-            $data['active'] = 'notactive';
+            $data['active'] = false;
         } else if ($this->qa->get_state()->is_active()) {
-            $data['active'] = 'active';
+            $data['active'] = true;
         }
 
-        $sortableitem = 'sortableitem';
-        if ($this->options->readonly) {
-            $data['readonly'] = true;
-            $sortableitem = '';
-        }
-
-        $data['questiontext'] = $question->format_questiontext($this->qa);
-        $data['ablockid'] = $ablockid;
-        $data['sortableid'] = $sortableid;
-        $data['responsename'] = $responsename;
-        $data['responseid'] = $responseid;
+        $data['readonly'] = $this->options->readonly;
 
         if (count($currentresponse)) {
 
@@ -111,36 +98,6 @@ class formulation_and_controls extends renderable_base {
                     continue; // Shouldn't happen !!
                 }
 
-                $img = '';
-                // Set the CSS class and correctness img for this response.
-                // (correctness: HIDDEN=0, VISIBLE=1, EDITABLE=2).
-                switch ($this->options->correctness) {
-                    case question_display_options::VISIBLE:
-                        $score = $question->get_ordering_item_score($question, $position, $answerid);
-                        if (isset($score['maxscore'])) {
-                            $renderer = $PAGE->get_renderer('qtype_ordering');
-                            $img = $renderer->feedback_image($score['fraction']);
-                        }
-                        $class = trim("$sortableitem " . $score['class']);
-                        break;
-                    case question_display_options::HIDDEN:
-                    case question_display_options::EDITABLE:
-                        $class = $sortableitem;
-                        break;
-                    default:
-                        $class = '';
-                        break;
-                }
-
-                if (isset($this->options->highlightresponse) && $this->options->highlightresponse) {
-                    $score = $question->get_ordering_item_score($question, $position, $answerid);
-                    if (!isset($renderer)) {
-                        $renderer = $PAGE->get_renderer('qtype_ordering');
-                    }
-                    $img = $renderer->feedback_image($score['fraction']);
-                    $class = trim("$sortableitem ". $score['class']);
-                }
-
                 // Format the answer text.
                 $answer = $question->answers[$answerid];
                 $answertext = $question->format_text($answer->answer, $answer->answerformat,
@@ -149,7 +106,22 @@ class formulation_and_controls extends renderable_base {
                 // The original "id" revealed the correct order of the answers
                 // because $answer->fraction holds the correct order number.
                 // Therefore, we use the $answer's md5key for the "id".
-                $data['answers'][] = ['answertext' => $img . $answertext, 'class' => $class, 'id' => $answer->md5key];
+                $answerdata = [
+                    'answertext' => $answertext,
+                    'id' => $answer->md5key,
+                ];
+
+                if ($this->options->correctness === question_display_options::VISIBLE ||
+                        !empty($this->options->highlightresponse)) {
+                    $score = $question->get_ordering_item_score($question, $position, $answerid);
+                    if (isset($score['maxscore'])) {
+                        $renderer = $PAGE->get_renderer('qtype_ordering');
+                        $answerdata['feedbackimage'] = $renderer->feedback_image($score['fraction']);
+                    }
+                    $answerdata['scoreclass'] = $score['class'];
+                }
+
+                $data['answers'][] = $answerdata;
 
                 // Cache this answer key.
                 $md5keys[] = $answer->md5key;
