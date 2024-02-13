@@ -39,22 +39,22 @@ class feedback_test extends qbehaviour_walkthrough_test_base {
     /** @var array $correctanswers The correct answers for the question, added to quickly reference. */
     private $correctanswers = [
         0 => [
-            'answertext' => 'Modular'
+            'answertext' => 'Modular',
         ],
         1 => [
-            'answertext' => 'Object'
+            'answertext' => 'Object',
         ],
         2 => [
-            'answertext' => 'Oriented'
+            'answertext' => 'Oriented',
         ],
         3 => [
-            'answertext' => 'Dynamic'
+            'answertext' => 'Dynamic',
         ],
         4 => [
-            'answertext' => 'Learning'
+            'answertext' => 'Learning',
         ],
         5 => [
-            'answertext' => 'Environment'
+            'answertext' => 'Environment',
         ],
     ];
 
@@ -136,12 +136,12 @@ class feedback_test extends qbehaviour_walkthrough_test_base {
                         'numincorrect' => 0,
                     ],
                     'specificgradedetailfeedback' => [
-                        'showpartialwrong' => 0
+                        'showpartialwrong' => 0,
                     ],
                     'generalfeedback' => 'The correct answer is "Modular Object Oriented Dynamic Learning Environment".',
                     'rightanswer' => [
                         'hascorrectresponse' => true,
-                        'showcorrect' => false
+                        'showcorrect' => false,
                     ],
                 ],
             ],
