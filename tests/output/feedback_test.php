@@ -205,7 +205,8 @@ class feedback_test extends qbehaviour_walkthrough_test_base {
                     ],
                 ],
             ],
-            'Partially correct question attempt in progress (horizontal layout). Relative to ALL the previous and next items with hints' => [
+            'Partially correct question attempt in progress (horizontal layout). Relative to ALL the previous and next ' .
+            'items with hints' => [
                 [13 => 'Modular', 14 => 'Object', 15 => 'Oriented', 17 => 'Learning', 16 => 'Dynamic', 18 => 'Environment'],
                 qtype_ordering_question::GRADING_RELATIVE_ALL_PREVIOUS_AND_NEXT,
                 ['rot' => 'horizontal', 'inprogress' => true, 'feedback' => true],
