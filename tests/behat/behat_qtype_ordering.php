@@ -40,7 +40,8 @@ class behat_qtype_ordering extends behat_base {
      * @return string the xpath expression.
      */
     protected function item_xpath_by_label(string $label): string {
-        return "//li[contains(concat(' ', normalize-space(@class), ' '), 'sortableitem') and contains(normalize-space(.), '" . $this->escape($label) . "')]";
+        return "//li[contains(concat(' ', normalize-space(@class), ' '), 'sortableitem') and contains(normalize-space(.), '" .
+            $this->escape($label) . "')]";
     }
 
     /**

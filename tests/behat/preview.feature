@@ -1,4 +1,4 @@
-@qtype @qtype_ordering @MDL-EPIC
+@qtype @qtype_ordering
 Feature: Preview an Ordering question
   As a teacher
   In order to check my Ordering questions will work for students
